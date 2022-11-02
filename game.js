@@ -5,7 +5,7 @@ const SPEED_BLINK = 1
 
 let aux = 0
 let speed = 0.5
-let screenGameOver = true
+let screenGameOver = false
 let auxBlink = 0
 
 
@@ -82,6 +82,16 @@ function checkHitItself() {
 
 function draw() {
 
+    let score = snake.tail.length - 1
+    let record = localStorage.getItem("record")
+
+
+    if (record == null) {
+        localStorage.setItem("record", score)
+    }else if (score - 1 > record) {
+        localStorage.setItem("record", score)
+    }
+
     if (screenGameOver) {
         createRect(0,0,canvas.width, canvas.height, "black")
         createRect(0,0, canvas.width, canvas.height)
@@ -92,8 +102,10 @@ function draw() {
         canvasContext.fillText("Game Over",canvas.width/2 - 50, canvas.height/3)
         canvasContext.fillText("Press Enter to restart",canvas.width/2 - 100, canvas.height/3 + 30)
         canvasContext.fillText("Score: " + (snake.tail.length - 1),canvas.width/2 - 40, canvas.height/3 + 60)
-
-        
+        if (score - 1 > record) {
+            canvasContext.fillText("New Record!", canvas.width/2 - 55, canvas.height/3 + 90)
+        } 
+        // update scrore id score in html
     }else{
         createRect(0,0,canvas.width, canvas.height, "black")
         createRect(0,0, canvas.width, canvas.height)
@@ -106,8 +118,13 @@ function draw() {
         canvasContext.font = "20px Arial"
         canvasContext.fillStyle = "#00FF42"
         canvasContext.fillText("Score: " + (snake.tail.length -1),canvas.width - 120, 18)
+        canvasContext.fillText("Record: " + record,canvas.width - 120, 38)
         createRect(fruit.x, fruit.y, fruit.size, fruit.size, fruit.color)
+
+        // update scrore id score in html
     }
+
+
 
 
 }
